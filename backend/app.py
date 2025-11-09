@@ -1,3 +1,5 @@
+from agents.summary_agent import summary_workflow  # import your summary agent
+
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from datetime import datetime
@@ -41,6 +43,19 @@ def get_patient(patient_id: str):
     if not patient:
         raise HTTPException(status_code=404, detail="Patient not found")
     return {"patient": patient}
+
+@app.get("/api/patients/{patient_id}/summary")
+def get_patient_summary(patient_id: str):
+    """Get AI-generated discharge summary for patient"""
+    patient = patients_collection.find_one({"patient_id": patient_id}, {"_id": 0})
+    if not patient:
+        raise HTTPException(status_code=404, detail="Patient not found")
+    state = {"patient": patient}
+    from agents.summary_agent import summary_workflow   # import inside if needed
+    result = summary_workflow.invoke(state)
+    return {"summary": result["summary"]}
+
+
 
 @app.put("/api/patients/{patient_id}")
 def update_patient(patient_id: str, update: PatientUpdate):
