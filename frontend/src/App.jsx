@@ -2,15 +2,15 @@ import React from "react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Dashboard from "./pages/Dashboard";
-import SummaryPage from "./pages/SummaryPage";
+
+import MainApp from "./pages/MainApp"; // This is the new main component from the artifact
 
 const theme = createTheme({
   palette: {
     mode: "light",
-    primary: { main: "#2563eb" }, // deep hospital blue, fits screenshot
+    primary: { main: "#2563eb" },
     secondary: { main: "#0ea5e9" },
-    background: { default: "#f7fafc" } // off-white/light gray
+    background: { default: "#f7fafc" }
   },
   shape: { borderRadius: 16 }
 });
@@ -21,8 +21,7 @@ function App() {
       <CssBaseline />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/summary/:patient_id" element={<SummaryPage />} />
+          <Route path="/*" element={<MainApp />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>

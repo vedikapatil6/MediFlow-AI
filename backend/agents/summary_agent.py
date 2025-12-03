@@ -6,7 +6,6 @@ from datetime import datetime
 import os
 from database import patients_collection, discharge_logs_collection
 
-# LLM setup
 groq_llm = ChatGroq(
     api_key=os.getenv("GROQ_API_KEY"),
     model="openai/gpt-oss-120b",
@@ -19,7 +18,7 @@ def summary_node(state: Dict[str, Any]) -> Dict[str, Any]:
     """
     patient = state["patient"]
     
-    # Create summary prompt
+    # summary prompt
     prompt = PromptTemplate(
     input_variables=["name", "age", "diagnosis", "admission_date", "treatment_status", "ready_for_discharge", "vital_signs"],
     template="""
@@ -60,7 +59,6 @@ Never use asterisks or double stars. Never nest points. Insert a single blank li
     response = groq_llm.invoke(formatted_prompt)
     summary = response.content.strip()
     
-    # Log summary action
     discharge_logs_collection.insert_one({
         "patient_id": patient["patient_id"],
         "action": "discharge_summary_generated",

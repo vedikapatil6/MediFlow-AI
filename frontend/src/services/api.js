@@ -2,31 +2,38 @@ import axios from 'axios';
 
 const API_BASE_URL = 'http://localhost:8000';
 
-const api = axios.create({
-  baseURL: API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
-
 export const apiService = {
-  // Get all patients
-  getPatients: () => api.get('/api/patients'),
-
-  // Get specific patient
-  getPatient: (patientId) => api.get(`/api/patients/${patientId}`),
-
-  // Update patient
-  updatePatient: (patientId, data) => api.put(`/api/patients/${patientId}`, data),
-
-  // Run discharge detection
-  runDischargeDetection: () => api.post('/api/run-discharge-detection'),
-
-  // Get logs
-  getDischargeLog: () => api.get('/api/discharge-logs'),
-
-  // Get discharge summary (new endpoint)
-  getPatientSummary: (patientId) => api.get(`/api/patients/${patientId}/summary`)
+  // Patients
+  getPatients: () => axios.get(`${API_BASE_URL}/api/patients`),
+  
+  getPatient: (patientId) => axios.get(`${API_BASE_URL}/api/patients/${patientId}`),
+  
+  updatePatient: (patientId, data) => axios.put(`${API_BASE_URL}/api/patients/${patientId}`, data),
+  
+  // Discharge Detection
+  runDischargeDetection: () => axios.post(`${API_BASE_URL}/api/run-discharge-detection`),
+  
+  // Discharge Logs
+  getDischargeLog: () => axios.get(`${API_BASE_URL}/api/discharge-logs`),
+  
+  // Nurse Tasks
+  getNurseTasks: (patientId) => axios.get(`${API_BASE_URL}/api/nurse-tasks/${patientId}`),
+  
+  updateNurseTasks: (patientId, data) => 
+    axios.post(`${API_BASE_URL}/api/nurse-tasks/${patientId}/update`, data),
+  
+  addNurseTask: (patientId, item) => 
+    axios.post(`${API_BASE_URL}/api/nurse-tasks/${patientId}/add`, { item }),
+  
+  // Summary
+  getPatientSummary: (patientId) => 
+    axios.get(`${API_BASE_URL}/api/patients/${patientId}/summary`),
+  
+  // Pharmacy (coming soon)
+  getPharmacyTasks: (patientId) => 
+    axios.get(`${API_BASE_URL}/api/pharmacy/${patientId}`),
+  
+  // Billing (coming soon)
+  generateBill: (patientId) => 
+    axios.post(`${API_BASE_URL}/api/billing/${patientId}/generate`)
 };
-
-export default api;
